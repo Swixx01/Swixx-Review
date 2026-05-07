@@ -1,1 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SwixxVxl — Client Review</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --violet:     #6a00ff;
+  --violet-mid: #8a2fff;
+  --violet-lt:  #a855f7;
+  --lilac:      #c8a8f9;
+  --deep:       #000000;
+  --card-bg:    rgba(255,255,255,0.06);
+  --grey:       #9b8eb8;
+  --white:      #ffffff;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--deep);
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CURSOR ── */
+.cursor {
+  width: 10px; height: 10px;
+  background: var(--violet);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9999;
+  mix-blend-mode: screen;
+  box-shadow: 0 0 18px 5px rgba(106,0,255,0.8);
+}
+.cursor-ring {
+  width: 38px; height: 38px;
+  border: 1px solid rgba(200,168,249,0.5);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9998;
+}
+
+/* ── SCENE ── */
+.scene { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
+.scene::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 55% at 75% 5%,  rgba(106,0,255,0.5) 0%, transparent 58%),
+    radial-gradient(ellipse 50% 45% at 5%  88%,  rgba(138,47,255,0.35) 0%, transparent 55%),
+    #000000;
+}
+.scene::after {
+  content: ''; position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.04; pointer-events: none;
+}
+.blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.6; animation: blobFloat linear infinite; }
+.blob-1 { width: 420px; height: 420px; background: radial-gradient(circle, #6a00ff, #3d00a0); top: -10%; left: 55%; animation-duration: 18s; }
+.blob-2 { width: 280px; height: 280px; background: radial-gradient(circle, #9b4dff, #5500cc); bottom: 5%; left: -5%; animation-duration: 22s; animation-delay: -9s; }
+.blob-3 { width: 160px; height: 160px; background: radial-gradient(circle, #c8a8f9, #8a2fff); top: 45%; right: -3%; animation-duration: 16s; animation-delay: -5s; opacity: 0.28; }
+@keyframes blobFloat {
+  0%   { transform: translate(0,0) scale(1) rotate(0deg); }
+  33%  { transform: translate(26px,-36px) scale(1.07) rotate(4deg); }
+  66%  { transform: translate(-16px,18px) scale(0.95) rotate(-3deg); }
+  100% { transform: translate(0,0) scale(1) rotate(0deg); }
+}
+
+/* ── WRAPPER ── */
+.wrapper { position: relative; z-index: 2; max-width: 660px; margin: 0 auto; padding: 80px 24px 120px; }
+
+/* ── SCREENS ── */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ── HEADER ── */
+.header { text-align: center; margin-bottom: 52px; animation: fadeUp 0.9s cubic-bezier(.22,1,.36,1) both; }
+
+.studio-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-weight: 700; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--lilac);
+  background: rgba(200,168,249,0.07);
+  border: 1px solid rgba(200,168,249,0.22);
+  padding: 7px 18px; border-radius: 100px; margin-bottom: 32px;
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+}
+.studio-tag::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--violet); box-shadow: 0 0 10px 3px rgba(106,0,255,0.85); display: block;
+}
+
+h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(60px, 13vw, 104px);
+  line-height: 0.88; letter-spacing: 0.02em;
+  color: var(--white); margin-bottom: 20px;
+}
+h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--lilac) 0%, var(--violet) 65%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.sub { font-weight: 300; font-size: 15px; color: rgba(255,255,255,0.55); line-height: 1.7; max-width: 380px; margin: 0 auto; }
+
+/* ── GLASS CARD ── */
+.glass-card {
+  position: relative; border-radius: 28px; padding: 50px 44px;
+  animation: fadeUp 0.9s 0.15s cubic-bezier(.22,1,.36,1) both; overflow: hidden;
+  background: rgba(255,255,255,0.055);
+  backdrop-filter: blur(48px) saturate(200%); -webkit-backdrop-filter: blur(48px) saturate(200%);
+  border: 1px solid rgba(255,255,255,0.13);
+  box-shadow: 0 0 0 1px rgba(106,0,255,0.08) inset, 0 40px 90px rgba(0,0,0,0.65), 0 4px 14px rgba(106,0,255,0.12) inset;
+}
+.glass-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 30%, rgba(200,168,249,0.55) 60%, transparent 100%);
+  border-radius: 28px 28px 0 0;
+}
+.glass-card::after {
+  content: ''; position: absolute; width: 340px; height: 340px;
+  background: radial-gradient(circle, rgba(106,0,255,0.1) 0%, transparent 70%);
+  top: -90px; right: -90px; border-radius: 50%; pointer-events: none; filter: blur(32px);
+  animation: shimmerMove 9s ease-in-out infinite alternate;
+}
+@keyframes shimmerMove { from { transform: translate(0,0) scale(1); } to { transform: translate(-28px,28px) scale(1.18); } }
+@media (max-width: 500px) { .glass-card { padding: 32px 20px; } }
+
+/* ── SECTION LABEL ── */
+.section-label {
+  font-weight: 900; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: #ffffff; margin-bottom: 14px; opacity: 0.9;
+}
+
+/* ── FIELD GROUP ── */
+.field-group { margin-bottom: 36px; position: relative; z-index: 1; }
+
+/* ── GLASS INPUT ── */
+.field-input {
+  width: 100%;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 14px; padding: 15px 20px;
+  color: #ffffff;
+  font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 400;
+  outline: none; transition: all 0.3s ease;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3) inset;
+}
+.field-input::placeholder { color: rgba(255,255,255,0.3); }
+.field-input:focus {
+  border-color: rgba(106,0,255,0.7);
+  background: rgba(106,0,255,0.1);
+  box-shadow: 0 0 0 3px rgba(106,0,255,0.15), 0 2px 10px rgba(0,0,0,0.3) inset, 0 0 22px rgba(106,0,255,0.12);
+}
+textarea.field-input { resize: none; height: 112px; line-height: 1.65; }
+.field-input.error { border-color: rgba(255,77,106,0.7); box-shadow: 0 0 0 3px rgba(255,77,106,0.12); }
+
+/* ── STARS ── */
+.stars { display: flex; gap: 6px; margin-top: 6px; }
+.star-btn {
+  background: none; border: none; cursor: none;
+  font-size: 32px; line-height: 1; padding: 3px;
+  color: rgba(255,255,255,0.2);
+  transition: color 0.15s, transform 0.2s cubic-bezier(.34,1.56,.64,1), filter 0.15s;
+}
+.star-btn:hover, .star-btn.active {
+  color: #ffffff;
+  filter: drop-shadow(0 0 10px rgba(168,85,247,0.9));
+}
+.star-btn.hover-active { transform: scale(1.32); }
+.rating-label {
+  font-weight: 500; font-size: 12px; color: rgba(255,255,255,0.5);
+  margin-top: 10px; min-height: 18px; font-style: italic; letter-spacing: 0.03em;
+}
+
+/* ── CHIPS ── */
+.chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.chip {
+  position: relative; overflow: hidden;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 100px; padding: 10px 22px;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(255,255,255,0.6); cursor: none;
+  transition: all 0.25s cubic-bezier(.22,1,.36,1);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  user-select: none;
+}
+.chip::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  opacity: 0; transition: opacity 0.2s;
+}
+.chip:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.35); color: #ffffff; box-shadow: 0 8px 24px rgba(0,0,0,0.35); }
+.chip:hover::before { opacity: 1; }
+.chip.selected {
+  background: rgba(106,0,255,0.4); border-color: rgba(106,0,255,0.75);
+  color: #ffffff; transform: translateY(-2px);
+  box-shadow: 0 0 0 1px rgba(200,168,249,0.25) inset, 0 8px 30px rgba(106,0,255,0.45), 0 0 40px rgba(106,0,255,0.18);
+}
+.chip.selected::before { opacity: 1; }
+
+/* ── DIVIDER ── */
+.divider {
+  border: none; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12) 30%, rgba(200,168,249,0.15) 60%, transparent);
+  margin: 36px 0; position: relative; z-index: 1;
+}
+
+/* ── BUTTONS ── */
+.submit-btn, .back-btn, .edit-btn, .confirm-btn, .cancel-btn {
+  font-family: 'Outfit', sans-serif; border: none; border-radius: 14px;
+  cursor: none; overflow: hidden; position: relative;
+  transition: transform 0.2s cubic-bezier(.22,1,.36,1), box-shadow 0.2s;
+}
+
+.submit-btn {
+  width: 100%; padding: 20px; color: #ffffff;
+  font-weight: 900; font-size: 13px; letter-spacing: 0.24em; text-transform: uppercase;
+  z-index: 1; margin-top: 10px;
+  background: linear-gradient(135deg, rgba(106,0,255,0.92), rgba(90,0,210,0.97), rgba(138,47,255,0.92));
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.16) inset, 0 1px 0 rgba(255,255,255,0.22) inset,
+              0 18px 44px rgba(106,0,255,0.5), 0 4px 14px rgba(0,0,0,0.35);
+}
+.submit-btn::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.13), transparent);
+  border-radius: 14px 14px 0 0; pointer-events: none;
+}
+.submit-btn::after {
+  content: ''; position: absolute; top: 0; left: -100%; width: 55%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.13), transparent);
+  transform: skewX(-20deg); transition: left 0.5s ease;
+}
+.submit-btn:hover::after { left: 160%; }
+.submit-btn:hover { transform: translateY(-3px); box-shadow: 0 0 0 1px rgba(255,255,255,0.2) inset, 0 22px 56px rgba(106,0,255,0.65), 0 6px 18px rgba(0,0,0,0.38); }
+.submit-btn:active { transform: translateY(0); }
+
+/* ── ERROR ── */
+.error-msg { font-weight: 500; font-size: 11.5px; color: #ff7090; margin-top: 7px; display: none; letter-spacing: 0.03em; }
+.error-msg.show { display: block; }
+
+/* ── CONFIRMATION MODAL ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 100;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  align-items: center; justify-content: center; padding: 24px;
+}
+.modal-overlay.open { display: flex; animation: fadeIn 0.25s ease both; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal {
+  position: relative; border-radius: 24px; padding: 44px 40px;
+  max-width: 440px; width: 100%; text-align: center;
+  background: rgba(20,0,48,0.85);
+  border: 1px solid rgba(255,255,255,0.14);
+  backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+  box-shadow: 0 0 0 1px rgba(200,168,249,0.12) inset, 0 40px 80px rgba(0,0,0,0.7);
+  animation: popUp 0.35s cubic-bezier(.34,1.56,.64,1) both;
+}
+.modal::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35) 40%, rgba(200,168,249,0.45) 65%, transparent);
+  border-radius: 24px 24px 0 0;
+}
+@keyframes popUp { from { opacity: 0; transform: scale(0.88) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+.modal-icon { font-size: 36px; margin-bottom: 16px; display: block; }
+.modal h3 { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 0.06em; margin-bottom: 10px; }
+.modal p { font-weight: 300; font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.65; margin-bottom: 32px; }
+
+/* Review summary inside modal */
+.review-summary {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px; padding: 18px 20px; margin-bottom: 28px; text-align: left;
+}
+.review-summary .sum-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; }
+.review-summary .sum-row + .sum-row { border-top: 1px solid rgba(255,255,255,0.07); }
+.review-summary .sum-key { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+.review-summary .sum-val { font-size: 13px; font-weight: 500; color: #ffffff; max-width: 60%; text-align: right; }
+.review-summary .sum-stars { color: #ffffff; font-size: 14px; filter: drop-shadow(0 0 5px rgba(168,85,247,0.8)); }
+
+.modal-actions { display: flex; gap: 12px; }
+
+.confirm-btn {
+  flex: 1; padding: 16px; color: #ffffff;
+  font-weight: 900; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+  background: linear-gradient(135deg, var(--violet), var(--violet-mid));
+  box-shadow: 0 8px 28px rgba(106,0,255,0.45);
+}
+.confirm-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(106,0,255,0.6); }
+
+.cancel-btn {
+  flex: 1; padding: 16px; color: rgba(255,255,255,0.7);
+  font-weight: 700; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.14);
+}
+.cancel-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.12); color: #ffffff; }
+
+/* ── SUCCESS SCREEN ── */
+#successScreen { text-align: center; padding: 60px 24px; animation: fadeUp 0.7s cubic-bezier(.22,1,.36,1) both; }
+
+.success-icon-wrap {
+  width: 90px; height: 90px; margin: 0 auto 28px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 38px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 0 0 1px rgba(200,168,249,0.15) inset, 0 0 56px rgba(106,0,255,0.38);
+  animation: pop 0.6s 0.1s cubic-bezier(.34,1.56,.64,1) both;
+}
+#successScreen h2 {
+  font-family: 'Bebas Neue', sans-serif; font-size: 58px; letter-spacing: 0.04em; margin-bottom: 14px;
+  background: linear-gradient(135deg, #ffffff 0%, var(--lilac) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+#successScreen p { font-weight: 300; font-size: 15px; color: rgba(255,255,255,0.5); line-height: 1.75; }
+#successScreen .highlight { font-weight: 700; color: var(--lilac); }
+
+.success-actions { display: flex; gap: 12px; justify-content: center; margin-top: 36px; flex-wrap: wrap; }
+
+.back-btn, .edit-btn {
+  padding: 14px 28px; font-weight: 700; font-size: 12px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+}
+.back-btn {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.75);
+}
+.back-btn:hover { background: rgba(255,255,255,0.13); color: #ffffff; transform: translateY(-2px); }
+.edit-btn {
+  background: rgba(106,0,255,0.25);
+  border: 1px solid rgba(106,0,255,0.5);
+  color: var(--lilac);
+}
+.edit-btn:hover { background: rgba(106,0,255,0.38); color: #ffffff; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(106,0,255,0.35); }
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center; margin-top: 52px;
+  font-weight: 700; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(255,255,255,0.18);
+  animation: fadeUp 0.9s 0.3s cubic-bezier(.22,1,.36,1) both;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pop    { from { opacity: 0; transform: scale(0.35); }       to { opacity: 1; transform: scale(1); } }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<div class="scene">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<!-- ── CONFIRMATION MODAL ── -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <span class="modal-icon">✦</span>
+    <h3>CONFIRM REVIEW</h3>
+    <p>Here's what you're submitting. Everything look good?</p>
+    <div class="review-summary" id="reviewSummary"></div>
+    <div class="modal-actions">
+      <button class="cancel-btn" onclick="closeModal()">← Edit</button>
+      <button class="confirm-btn" onclick="confirmSubmit()">Yes, Submit</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrapper">
+
+  <!-- ── FORM SCREEN ── -->
+  <div class="screen active" id="formScreen">
+
+    <header class="header">
+      <div class="studio-tag">SwixxVxl</div>
+      <h1>HOW WAS<br>YOUR<br><em>EXPERIENCE?</em></h1>
+      <p class="sub">Your honest feedback shapes how we grow. Takes less than a minute.</p>
+    </header>
+
+    <div class="glass-card">
+
+      <div class="field-group">
+        <div class="section-label">Your Name</div>
+        <input type="text" class="field-input" id="clientName" placeholder="e.g. Alexis Okafor" autocomplete="off"/>
+        <div class="error-msg" id="nameError">Please enter your name.</div>
+      </div>
+
+      <div class="field-group">
+        <div class="section-label">Service Rendered</div>
+        <div class="chips">
+          <div class="chip" data-value="Brand Design">Brand Design</div>
+          <div class="chip" data-value="Visual Design">Visual Design</div>
+          <div class="chip" data-value="Social Media">Social Media</div>
+          <div class="chip" data-value="Others">Others</div>
+        </div>
+        <div class="error-msg" id="serviceError">Please select a service.</div>
+      </div>
+
+      <div class="field-group">
+        <div class="section-label">Rate Your Experience</div>
+        <div class="stars">
+          <button class="star-btn" data-val="1">★</button>
+          <button class="star-btn" data-val="2">★</button>
+          <button class="star-btn" data-val="3">★</button>
+          <button class="star-btn" data-val="4">★</button>
+          <button class="star-btn" data-val="5">★</button>
+        </div>
+        <div class="rating-label" id="ratingLabel">Tap a star to rate</div>
+        <div class="error-msg" id="ratingError">Please give a rating.</div>
+      </div>
+
+      <hr class="divider"/>
+
+      <div class="field-group" style="margin-bottom:10px;">
+        <div class="section-label">Leave a Comment &nbsp;<span style="color:rgba(255,255,255,0.35);font-size:9px;font-weight:400;letter-spacing:.08em;">Optional</span></div>
+        <textarea class="field-input" id="comment" placeholder="What stood out? What could be better? Anything goes…"></textarea>
+      </div>
+
+      <button class="submit-btn" onclick="handleSubmit()">Review My Submission →</button>
+
+    </div>
+
+    <div class="footer">© 2026 SwixxVxl · All Rights Reserved</div>
+  </div>
+
+  <!-- ── SUCCESS SCREEN ── -->
+  <div class="screen" id="successScreen">
+
+    <header class="header" style="margin-bottom: 32px;">
+      <div class="studio-tag">SwixxVxl</div>
+      <div class="success-icon-wrap">✦</div>
+      <h2>THANK YOU.</h2>
+      <p>Your feedback means everything.<br>
+      <span class="highlight" id="thankName"></span> — we see you, and we appreciate you.</p>
+    </header>
+
+    <div class="success-actions">
+      <button class="back-btn" onclick="goBack()">← Start Over</button>
+      <button class="edit-btn" onclick="editReview()">✎ Edit My Review</button>
+    </div>
+
+    <div class="footer" style="margin-top: 52px;">© 2026 SwixxVxl · All Rights Reserved</div>
+  </div>
+
+</div><!-- /wrapper -->
+
+<script>
+  // ── Cursor
+  const cursorEl = document.getElementById('cursor');
+  const ringEl   = document.getElementById('cursorRing');
+  let mx=0, my=0, rx=0, ry=0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursorEl.style.transform = `translate(${mx-5}px,${my-5}px)`;
+  });
+  (function animRing(){
+    rx += (mx-rx)*0.1; ry += (my-ry)*0.1;
+    ringEl.style.transform = `translate(${rx-19}px,${ry-19}px)`;
+    requestAnimationFrame(animRing);
+  })();
+
+  // ── State
+  let selectedRating  = 0;
+  let selectedService = '';
+  const ratingLabels  = ['','Not great','Could be better','Decent experience','Really happy','Absolutely loved it!'];
+
+  // ── Stars
+  const starBtns = document.querySelectorAll('.star-btn');
+  starBtns.forEach(btn => {
+    btn.addEventListener('mouseenter', () => {
+      const v = +btn.dataset.val;
+      starBtns.forEach(s => {
+        s.classList.toggle('active', +s.dataset.val <= v);
+        s.classList.toggle('hover-active', +s.dataset.val === v);
+      });
+      document.getElementById('ratingLabel').textContent = ratingLabels[v];
+    });
+    btn.addEventListener('mouseleave', () => {
+      starBtns.forEach(s => {
+        s.classList.toggle('active', +s.dataset.val <= selectedRating);
+        s.classList.remove('hover-active');
+      });
+      document.getElementById('ratingLabel').textContent = selectedRating ? ratingLabels[selectedRating] : 'Tap a star to rate';
+    });
+    btn.addEventListener('click', () => {
+      selectedRating = +btn.dataset.val;
+      document.getElementById('ratingError').classList.remove('show');
+    });
+  });
+
+  // ── Chips
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+      selectedService = chip.dataset.value;
+      document.getElementById('serviceError').classList.remove('show');
+    });
+  });
+
+  // ── Validate & open modal
+  function handleSubmit() {
+    let valid = true;
+    const name = document.getElementById('clientName').value.trim();
+
+    if (!name) {
+      document.getElementById('clientName').classList.add('error');
+      document.getElementById('nameError').classList.add('show');
+      valid = false;
+    } else {
+      document.getElementById('clientName').classList.remove('error');
+      document.getElementById('nameError').classList.remove('show');
+    }
+    if (!selectedService) { document.getElementById('serviceError').classList.add('show'); valid = false; }
+    if (!selectedRating)  { document.getElementById('ratingError').classList.add('show');  valid = false; }
+    if (!valid) return;
+
+    // Build summary
+    const stars = '★'.repeat(selectedRating) + '☆'.repeat(5 - selectedRating);
+    const comment = document.getElementById('comment').value.trim();
+    document.getElementById('reviewSummary').innerHTML = `
+      <div class="sum-row">
+        <span class="sum-key">Name</span>
+        <span class="sum-val">${name}</span>
+      </div>
+      <div class="sum-row">
+        <span class="sum-key">Service</span>
+        <span class="sum-val">${selectedService}</span>
+      </div>
+      <div class="sum-row">
+        <span class="sum-key">Rating</span>
+        <span class="sum-stars">${stars}</span>
+      </div>
+      ${comment ? `<div class="sum-row"><span class="sum-key">Comment</span><span class="sum-val" style="font-style:italic;color:rgba(255,255,255,0.65);">"${comment}"</span></div>` : ''}
+    `;
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+
+  function confirmSubmit() {
+    closeModal();
+    const name = document.getElementById('clientName').value.trim();
+    document.getElementById('thankName').textContent = name;
+    showScreen('successScreen');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Edit review — go back to form with data intact
+  function editReview() {
+    showScreen('formScreen');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Start over — clear everything
+  function goBack() {
+    selectedRating = 0; selectedService = '';
+    document.getElementById('clientName').value = '';
+    document.getElementById('comment').value = '';
+    document.getElementById('ratingLabel').textContent = 'Tap a star to rate';
+    starBtns.forEach(s => s.classList.remove('active','hover-active'));
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    ['nameError','serviceError','ratingError'].forEach(id => document.getElementById(id).classList.remove('show'));
+    ['clientName'].forEach(id => document.getElementById(id).classList.remove('error'));
+    showScreen('formScreen');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+</script>
+</body>
+</html>
 
